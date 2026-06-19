@@ -1,0 +1,124 @@
+const apiUrlInput = document.querySelector("#api-url");
+const accessTokenInput = document.querySelector("#access-token");
+const providerSelect = document.querySelector("#provider");
+const modelSelect = document.querySelector("#model");
+const form = document.querySelector("#unit-form");
+const statusLine = document.querySelector("#lab-status");
+const resultPanel = document.querySelector("#result-panel");
+const resultTitle = document.querySelector("#result-title");
+const resultSummary = document.querySelector("#result-summary");
+const resultComponents = document.querySelector("#result-components");
+const resultTags = document.querySelector("#result-tags");
+const resultMeta = document.querySelector("#result-meta");
+
+const MODELS = {
+  gemini: ["gemini-3.5-flash"],
+  huggingface: [
+    "HuggingFaceBio/Carbon-3B:hf-inference",
+    "google/gemma-2-2b-it:hf-inference",
+    "openai/gpt-oss-120b:cerebras",
+  ],
+};
+
+const DEFAULT_API_URL =
+  window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+    ? "http://localhost:8787/api/generate-unit"
+    : "https://build-little-worlds-api.profplate.workers.dev/api/generate-unit";
+
+apiUrlInput.value = localStorage.getItem("blw_api_url") || DEFAULT_API_URL;
+accessTokenInput.value = sessionStorage.getItem("blw_access_token") || "";
+syncModelOptions();
+
+providerSelect.addEventListener("change", syncModelOptions);
+apiUrlInput.addEventListener("change", () => {
+  localStorage.setItem("blw_api_url", apiUrlInput.value.trim());
+});
+accessTokenInput.addEventListener("change", () => {
+  sessionStorage.setItem("blw_access_token", accessTokenInput.value.trim());
+});
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const formData = new FormData(form);
+  const apiUrl = apiUrlInput.value.trim();
+  const accessToken = accessTokenInput.value.trim();
+  const payload = {
+    kind: formData.get("kind"),
+    prompt: formData.get("prompt"),
+    provider: formData.get("provider"),
+    model: formData.get("model"),
+  };
+
+  localStorage.setItem("blw_api_url", apiUrl);
+  sessionStorage.setItem("blw_access_token", accessToken);
+
+  setBusy(true);
+  setStatus("Generating...");
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-blw-access-token": accessToken,
+      },
+      body: JSON.stringify(payload),
+    });
+    const body = await response.json();
+
+    if (!response.ok) {
+      throw new Error(body.message || "The gateway rejected this request.");
+    }
+
+    renderResult(body);
+    setStatus("Ready");
+  } catch (error) {
+    setStatus(error.message || "Request failed.");
+  } finally {
+    setBusy(false);
+  }
+});
+
+function syncModelOptions() {
+  const provider = providerSelect.value;
+  const models = MODELS[provider] || [];
+  modelSelect.replaceChildren(
+    ...models.map((model) => {
+      const option = document.createElement("option");
+      option.value = model;
+      option.textContent = model;
+      return option;
+    }),
+  );
+}
+
+function renderResult(unit) {
+  resultTitle.textContent = unit.title;
+  resultSummary.textContent = unit.summary;
+  resultComponents.replaceChildren(
+    ...unit.components.map((component) => {
+      const item = document.createElement("li");
+      item.textContent = component;
+      return item;
+    }),
+  );
+  resultTags.replaceChildren(
+    ...unit.tags.map((tag) => {
+      const item = document.createElement("li");
+      item.textContent = tag;
+      return item;
+    }),
+  );
+  resultMeta.textContent = `${unit.rawProvider} / ${unit.model}`;
+  resultPanel.hidden = false;
+}
+
+function setStatus(message) {
+  statusLine.textContent = message;
+}
+
+function setBusy(isBusy) {
+  form.querySelector("button").disabled = isBusy;
+  form.setAttribute("aria-busy", String(isBusy));
+}

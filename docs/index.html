@@ -9,6 +9,7 @@
       content="Build Little Worlds is a world-building project about small composable units: spells, terrain, rules, rituals, institutions, economies, interfaces, and narrative mechanisms."
     >
     <link rel="stylesheet" href="styles.css">
+    <script type="module" src="app.js"></script>
   </head>
   <body>
     <main class="page-shell">
@@ -45,6 +46,86 @@
           world-building units. Private access and member workflows will come
           later on infrastructure built for authentication.
         </p>
+      </section>
+
+      <section class="lab" aria-labelledby="lab-title">
+        <div class="lab-header">
+          <p class="eyebrow">Private model gateway</p>
+          <h2 id="lab-title">Unit Generator</h2>
+          <p id="lab-status" aria-live="polite">Ready</p>
+        </div>
+
+        <form id="unit-form" class="lab-form">
+          <label>
+            API URL
+            <input id="api-url" name="api-url" type="url" autocomplete="off" required>
+          </label>
+
+          <label>
+            Access Token
+            <input id="access-token" name="access-token" type="password" autocomplete="off" required>
+          </label>
+
+          <label>
+            Kind
+            <select name="kind" required>
+              <option value="spell">Spell</option>
+              <option value="place">Place</option>
+              <option value="faction">Faction</option>
+              <option value="ritual">Ritual</option>
+              <option value="rule">Rule</option>
+              <option value="object">Object</option>
+              <option value="economy">Economy</option>
+              <option value="interface">Interface</option>
+              <option value="material">Material</option>
+              <option value="creature">Creature</option>
+              <option value="institution">Institution</option>
+              <option value="custom">Custom</option>
+            </select>
+          </label>
+
+          <label>
+            Provider
+            <select id="provider" name="provider" required>
+              <option value="gemini">Gemini</option>
+              <option value="huggingface">Hugging Face</option>
+            </select>
+          </label>
+
+          <label class="wide">
+            Model
+            <select id="model" name="model" required></select>
+          </label>
+
+          <label class="wide">
+            Seed
+            <textarea
+              name="prompt"
+              maxlength="1000"
+              rows="5"
+              required
+              placeholder="a village where doors remember who knocked first"
+            ></textarea>
+          </label>
+
+          <button type="submit">Generate Unit</button>
+        </form>
+
+        <article id="result-panel" class="result-panel" hidden>
+          <p id="result-meta" class="result-meta"></p>
+          <h3 id="result-title"></h3>
+          <p id="result-summary"></p>
+          <div class="result-lists">
+            <div>
+              <h4>Components</h4>
+              <ul id="result-components"></ul>
+            </div>
+            <div>
+              <h4>Tags</h4>
+              <ul id="result-tags" class="tag-list"></ul>
+            </div>
+          </div>
+        </article>
       </section>
     </main>
   </body>

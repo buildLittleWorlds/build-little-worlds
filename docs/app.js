@@ -1,7 +1,5 @@
 const apiUrlInput = document.querySelector("#api-url");
 const accessTokenInput = document.querySelector("#access-token");
-const providerSelect = document.querySelector("#provider");
-const modelSelect = document.querySelector("#model");
 const form = document.querySelector("#unit-form");
 const statusLine = document.querySelector("#lab-status");
 const resultPanel = document.querySelector("#result-panel");
@@ -11,14 +9,7 @@ const resultComponents = document.querySelector("#result-components");
 const resultTags = document.querySelector("#result-tags");
 const resultMeta = document.querySelector("#result-meta");
 
-const MODELS = {
-  gemini: ["gemini-3.5-flash"],
-  huggingface: [
-    "HuggingFaceBio/Carbon-3B:hf-inference",
-    "google/gemma-2-2b-it:hf-inference",
-    "openai/gpt-oss-120b:cerebras",
-  ],
-};
+const MODEL = "gemini-3.5-flash";
 
 const DEFAULT_API_URL =
   window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
@@ -27,9 +18,7 @@ const DEFAULT_API_URL =
 
 apiUrlInput.value = localStorage.getItem("blw_api_url") || DEFAULT_API_URL;
 accessTokenInput.value = sessionStorage.getItem("blw_access_token") || "";
-syncModelOptions();
 
-providerSelect.addEventListener("change", syncModelOptions);
 apiUrlInput.addEventListener("change", () => {
   localStorage.setItem("blw_api_url", apiUrlInput.value.trim());
 });
@@ -46,8 +35,7 @@ form.addEventListener("submit", async (event) => {
   const payload = {
     kind: formData.get("kind"),
     prompt: formData.get("prompt"),
-    provider: formData.get("provider"),
-    model: formData.get("model"),
+    model: MODEL,
   };
 
   localStorage.setItem("blw_api_url", apiUrl);
@@ -79,19 +67,6 @@ form.addEventListener("submit", async (event) => {
     setBusy(false);
   }
 });
-
-function syncModelOptions() {
-  const provider = providerSelect.value;
-  const models = MODELS[provider] || [];
-  modelSelect.replaceChildren(
-    ...models.map((model) => {
-      const option = document.createElement("option");
-      option.value = model;
-      option.textContent = model;
-      return option;
-    }),
-  );
-}
 
 function renderResult(unit) {
   resultTitle.textContent = unit.title;

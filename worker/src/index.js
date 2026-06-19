@@ -2,6 +2,7 @@ const DEFAULT_API_PATH = "/api/generate-unit";
 const MAX_PROMPT_CHARS = 1000;
 const MAX_COMPONENTS = 6;
 const DEFAULT_RATE_LIMIT_PER_HOUR = 30;
+const DEFAULT_MODEL = "gemini-3.5-flash";
 
 const ALLOWED_KINDS = [
   "spell",
@@ -17,20 +18,6 @@ const ALLOWED_KINDS = [
   "institution",
   "custom",
 ];
-
-const MODEL_ALLOWLIST = {
-  gemini: ["gemini-3.5-flash"],
-  huggingface: [
-    "HuggingFaceBio/Carbon-3B:hf-inference",
-    "google/gemma-2-2b-it:hf-inference",
-    "openai/gpt-oss-120b:cerebras",
-  ],
-};
-
-const DEFAULT_MODELS = {
-  gemini: "gemini-3.5-flash",
-  huggingface: "HuggingFaceBio/Carbon-3B:hf-inference",
-};
 
 const RESPONSE_SCHEMA = {
   type: "object",
@@ -84,7 +71,6 @@ export async function handleRequest(request, env = {}, ctx = {}) {
         ok: true,
         providers: {
           gemini: Boolean(env.GEMINI_API_KEY),
-          huggingface: Boolean(env.HF_TOKEN),
         },
       },
       { headers: corsHeaders },
@@ -136,13 +122,11 @@ export async function handleRequest(request, env = {}, ctx = {}) {
   }
 
   const startedAt = Date.now();
-  const { kind, prompt, provider, model } = validation.value;
+  const { kind, prompt, model } = validation.value;
+  const provider = "gemini";
 
   try {
-    const generated =
-      provider === "gemini"
-        ? await generateWithGemini({ kind, prompt, model, env })
-        : await generateWithHuggingFace({ kind, prompt, model, env });
+    const generated = await generateWithGemini({ kind, prompt, model, env });
 
     const body = normalizeWorldUnit({
       unit: generated.unit,
@@ -168,11 +152,10 @@ export async function handleRequest(request, env = {}, ctx = {}) {
 
 export function validatePayload(payload) {
   const kind = normalizeKind(payload?.kind);
-  const provider = normalizeProvider(payload?.provider);
   const prompt = typeof payload?.prompt === "string" ? payload.prompt.trim() : "";
   const requestedModel =
     typeof payload?.model === "string" ? payload.model.trim() : "";
-  const model = requestedModel || DEFAULT_MODELS[provider || "gemini"];
+  const model = requestedModel || DEFAULT_MODEL;
 
   if (!kind || !ALLOWED_KINDS.includes(kind)) {
     return {
@@ -201,27 +184,17 @@ export function validatePayload(payload) {
     };
   }
 
-  if (!provider || !MODEL_ALLOWLIST[provider]) {
-    return {
-      ok: false,
-      body: {
-        error: "bad_provider",
-        message: "Provider must be gemini or huggingface.",
-      },
-    };
-  }
-
-  if (!MODEL_ALLOWLIST[provider].includes(model)) {
+  if (model !== DEFAULT_MODEL) {
     return {
       ok: false,
       body: {
         error: "bad_model",
-        message: `Model is not allowed for ${provider}.`,
+        message: `Model must be ${DEFAULT_MODEL}.`,
       },
     };
   }
 
-  return { ok: true, value: { kind, prompt, provider, model } };
+  return { ok: true, value: { kind, prompt, model } };
 }
 
 async function generateWithGemini({ kind, prompt, model, env }) {
@@ -263,48 +236,6 @@ async function generateWithGemini({ kind, prompt, model, env }) {
   }
 
   const text = body?.candidates?.[0]?.content?.parts?.map((part) => part.text || "").join("") || "";
-  return { unit: parseModelJson(text) };
-}
-
-async function generateWithHuggingFace({ kind, prompt, model, env }) {
-  if (!env.HF_TOKEN) {
-    throw providerError("Hugging Face is not configured on this API gateway.", 500);
-  }
-
-  const response = await fetch("https://router.huggingface.co/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${env.HF_TOKEN}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model,
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: buildUserPrompt(kind, prompt) },
-      ],
-      temperature: 0.8,
-      max_tokens: 700,
-      response_format: {
-        type: "json_schema",
-        json_schema: {
-          name: "world_unit",
-          schema: RESPONSE_SCHEMA,
-          strict: true,
-        },
-      },
-    }),
-  });
-
-  const body = await readJsonResponse(response);
-  if (!response.ok) {
-    throw providerError(
-      extractErrorMessage(body, "Hugging Face request failed."),
-      response.status,
-    );
-  }
-
-  const text = body?.choices?.[0]?.message?.content || "";
   return { unit: parseModelJson(text) };
 }
 
@@ -478,10 +409,6 @@ function providerError(message, status) {
 
 function normalizeKind(value) {
   return typeof value === "string" ? value.trim().toLowerCase() : "";
-}
-
-function normalizeProvider(value) {
-  return typeof value === "string" ? value.trim().toLowerCase() : "gemini";
 }
 
 function logRequest({ ok, kind, provider, model, startedAt, error }) {

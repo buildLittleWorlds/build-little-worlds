@@ -21,7 +21,7 @@ GitHub Pages can host static HTML, CSS, and JavaScript. It does not provide secu
 
 ## AI Experiment Gateway
 
-The static site in `docs/` now includes a private text-unit generator. It calls a separate API gateway instead of calling Gemini or Hugging Face directly from browser JavaScript.
+The static site in `docs/` now includes a private text-unit generator. It calls a separate API gateway instead of calling Gemini directly from browser JavaScript.
 
 Recommended first deployment:
 
@@ -69,10 +69,9 @@ Set these as encrypted Worker secrets:
 ```bash
 wrangler secret put BLW_ACCESS_TOKEN
 wrangler secret put GEMINI_API_KEY
-wrangler secret put HF_TOKEN
 ```
 
-`BLW_ACCESS_TOKEN` is the private token typed into the site UI. It protects the gateway from casual public use. It is not a Gemini or Hugging Face key.
+`BLW_ACCESS_TOKEN` is the private token typed into the site UI. It protects the gateway from casual public use. It is not a Gemini API key.
 
 ### Local Development
 
@@ -110,7 +109,7 @@ After deployment, use the `workers.dev` URL until the custom API hostname is
 ready. The attempted direct Worker custom-domain deploy for
 `api.buildlittleworlds.com` fails while `buildlittleworlds.com` is not active as
 a Cloudflare-managed zone. Keep provider keys restricted/audited in the Gemini
-and Hugging Face dashboards.
+dashboard.
 
 ### Custom API Domain
 

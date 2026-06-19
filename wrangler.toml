@@ -11,4 +11,3 @@ RATE_LIMIT_PER_HOUR = "30"
 # Set these as encrypted Cloudflare secrets, not plaintext vars:
 # wrangler secret put BLW_ACCESS_TOKEN
 # wrangler secret put GEMINI_API_KEY
-# wrangler secret put HF_TOKEN

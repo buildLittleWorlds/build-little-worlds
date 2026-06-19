@@ -61,12 +61,9 @@ test("gateway calls Gemini and normalizes a world unit", async (t) => {
     assert.match(String(url), /generativelanguage\.googleapis\.com/);
     assert.equal(init.headers["x-goog-api-key"], env.GEMINI_API_KEY);
     const requestBody = JSON.parse(init.body);
-    assert.equal(
-      requestBody.generationConfig.responseFormat.text.mimeType,
-      "application/json",
-    );
+    assert.equal(requestBody.generationConfig.responseMimeType, "application/json");
     assert.deepEqual(
-      requestBody.generationConfig.responseFormat.text.schema.required,
+      requestBody.generationConfig.responseJsonSchema.required,
       ["title", "summary", "components", "tags"],
     );
 

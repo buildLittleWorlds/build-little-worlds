@@ -35,6 +35,9 @@ The Worker exposes:
 - `POST /api/generate-unit`
 - `GET /api/health`
 
+Gemini calls use structured JSON output with a response schema, so the gateway
+can reliably parse the generated unit before returning it to the browser.
+
 Request body:
 
 ```json

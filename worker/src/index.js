@@ -250,7 +250,12 @@ async function generateWithGemini({ kind, prompt, model, env }) {
         generationConfig: {
           temperature: 0.8,
           maxOutputTokens: 700,
-          responseMimeType: "application/json",
+          responseFormat: {
+            text: {
+              mimeType: "application/json",
+              schema: RESPONSE_SCHEMA,
+            },
+          },
         },
       }),
     },

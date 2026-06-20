@@ -1,6 +1,9 @@
 # Build Little Worlds
 
-Build Little Worlds is a public placeholder for a world-building project about composability: making small units that can be recombined into larger fictional, playful, and conceptual systems.
+Build Little Worlds is a public experimental lab for world-building through
+abstract primitives. The current version asks what citation could become if a
+scholarly world built its rules, rituals, obligations, interfaces, and
+consequences differently.
 
 The first version is intentionally static and deploys through GitHub Pages. It introduces the site direction while leaving room for a later authenticated experience.
 
@@ -21,7 +24,9 @@ GitHub Pages can host static HTML, CSS, and JavaScript. It does not provide secu
 
 ## AI Experiment Gateway
 
-The static site in `docs/` now includes a private text-unit generator. It calls a separate API gateway instead of calling Gemini directly from browser JavaScript.
+The static site in `docs/` now includes a private citation protocol generator.
+It calls a separate API gateway instead of calling Gemini directly from browser
+JavaScript.
 
 Recommended first deployment:
 
@@ -36,14 +41,15 @@ The Worker exposes:
 - `GET /api/health`
 
 Gemini calls use structured JSON output with a response schema, so the gateway
-can reliably parse the generated unit before returning it to the browser.
+can reliably parse the generated citation protocol before returning it to the
+browser.
 
 Request body:
 
 ```json
 {
-  "kind": "spell",
-  "prompt": "a lantern that remembers roads",
+  "kind": "protocol",
+  "prompt": "a university where every citation must name what it failed to preserve",
   "provider": "gemini",
   "model": "gemini-3.5-flash"
 }
@@ -53,10 +59,10 @@ Response body:
 
 ```json
 {
-  "title": "Roadmemory Lantern",
-  "summary": "A compact reusable world-building unit.",
-  "components": ["brass cage", "map-smoke wick", "remembered crossroads"],
-  "tags": ["spell", "travel", "memory"],
+  "title": "The Unpreserved Source Rule",
+  "summary": "Every citation must name the part of the source that the scholar could not carry forward.",
+  "components": ["loss clause", "witness mark", "repair interval"],
+  "tags": ["protocol", "memory", "responsibility"],
   "rawProvider": "gemini",
   "model": "gemini-3.5-flash"
 }

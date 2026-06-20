@@ -5,16 +5,13 @@ const DEFAULT_RATE_LIMIT_PER_HOUR = 30;
 const DEFAULT_MODEL = "gemini-3.5-flash";
 
 const ALLOWED_KINDS = [
-  "spell",
-  "place",
-  "faction",
-  "ritual",
-  "rule",
-  "object",
-  "economy",
-  "interface",
-  "material",
-  "creature",
+  "protocol",
+  "obligation",
+  "evidence-ritual",
+  "memory-system",
+  "authority-rule",
+  "refusal-custom",
+  "source-interface",
   "institution",
   "custom",
 ];
@@ -42,10 +39,13 @@ const RESPONSE_SCHEMA = {
 };
 
 const SYSTEM_PROMPT = [
-  "You generate small composable world-building units for imaginative creative projects.",
+  "You generate compact citation protocols for a world-building lab.",
+  "Treat citation as an alternate scholarly system, not ordinary citation formatting.",
   "Return exactly one compact JSON object matching this schema:",
   JSON.stringify(RESPONSE_SCHEMA),
-  "Make the unit concrete, reusable, and easy to combine with other units.",
+  "The components array means protocol parts: rules, rituals, obligations, interfaces, memory systems, refusal customs, or consequences.",
+  "Make the protocol concrete, reusable, and easy to combine with other protocols.",
+  "Show how scholarship, evidence, memory, authority, or responsibility changes under this protocol.",
   "Avoid proper nouns from copyrighted fictional worlds.",
 ].join("\n");
 
@@ -128,7 +128,7 @@ export async function handleRequest(request, env = {}, ctx = {}) {
   try {
     const generated = await generateWithGemini({ kind, prompt, model, env });
 
-    const body = normalizeWorldUnit({
+    const body = normalizeCitationProtocol({
       unit: generated.unit,
       rawProvider: provider,
       model,
@@ -241,13 +241,13 @@ async function generateWithGemini({ kind, prompt, model, env }) {
 
 function buildUserPrompt(kind, prompt) {
   return [
-    `Kind: ${kind}`,
-    `Creative seed: ${prompt}`,
-    "Generate one small world-building unit that could combine with others.",
+    `Citation protocol kind: ${kind}`,
+    `World seed: ${prompt}`,
+    "Generate one compact citation protocol that could combine with other scholarly-world primitives.",
   ].join("\n");
 }
 
-function normalizeWorldUnit({ unit, rawProvider, model }) {
+function normalizeCitationProtocol({ unit, rawProvider, model }) {
   const components = Array.isArray(unit.components)
     ? unit.components.slice(0, MAX_COMPONENTS).map(String).filter(Boolean)
     : [];

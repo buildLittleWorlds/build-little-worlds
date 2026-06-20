@@ -8,6 +8,7 @@
   --moss: #426b57;
   --clay: #a6533a;
   --sky: #496c89;
+  --plum: #6f4b70;
   --shadow: 0 18px 48px rgba(32, 33, 36, 0.14);
 }
 
@@ -37,8 +38,15 @@ body {
 }
 
 .intro {
-  max-width: 850px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+  gap: 34px;
+  align-items: center;
   padding: 0 0 40px;
+}
+
+.intro-copy {
+  max-width: 850px;
 }
 
 .eyebrow {
@@ -75,6 +83,85 @@ h1 {
   line-height: 1.55;
 }
 
+.protocol-diagram {
+  position: relative;
+  min-height: 320px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(73, 108, 137, 0.16) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(73, 108, 137, 0.13) 1px, transparent 1px),
+    rgba(255, 255, 255, 0.62);
+  background-size: 44px 44px;
+  box-shadow: var(--shadow);
+}
+
+.protocol-diagram::before {
+  position: absolute;
+  inset: 28px;
+  content: "";
+  border: 1px dashed rgba(66, 107, 87, 0.42);
+  border-radius: 50%;
+  transform: rotate(-9deg);
+}
+
+.protocol-diagram::after {
+  position: absolute;
+  inset: 74px 46px;
+  content: "";
+  border-top: 2px solid rgba(166, 83, 58, 0.36);
+  border-bottom: 2px solid rgba(111, 75, 112, 0.28);
+  transform: rotate(18deg);
+}
+
+.diagram-node {
+  position: absolute;
+  z-index: 1;
+  display: inline-grid;
+  min-width: 82px;
+  min-height: 44px;
+  place-items: center;
+  padding: 10px 13px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.94);
+}
+
+.diagram-node.source {
+  top: 34px;
+  left: 32px;
+  color: var(--moss);
+}
+
+.diagram-node.witness {
+  top: 88px;
+  right: 30px;
+  color: var(--sky);
+}
+
+.diagram-node.debt {
+  top: 148px;
+  left: 38%;
+  color: var(--clay);
+}
+
+.diagram-node.refusal {
+  bottom: 42px;
+  left: 34px;
+  color: var(--plum);
+}
+
+.diagram-node.memory {
+  right: 34px;
+  bottom: 36px;
+  color: var(--moss);
+}
+
 .unit-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -83,7 +170,6 @@ h1 {
 }
 
 article,
-.note,
 .lab {
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -104,6 +190,10 @@ article:nth-child(3) {
   border-top-color: var(--sky);
 }
 
+article:nth-child(4) {
+  border-top-color: var(--plum);
+}
+
 h2 {
   margin-bottom: 16px;
   font-size: 1.1rem;
@@ -119,7 +209,8 @@ article p,
 
 .note {
   max-width: 760px;
-  padding: 28px;
+  padding: 10px 0 10px 24px;
+  border-left: 4px solid var(--clay);
 }
 
 .lab {
@@ -290,10 +381,77 @@ button:disabled {
   background: var(--surface);
 }
 
+.reflection-panel {
+  margin-top: 24px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+
+.reflection-panel[hidden] {
+  display: none;
+}
+
+.reflection-panel h3 {
+  margin-bottom: 14px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+
+.reflection-panel ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reflection-panel li {
+  min-height: 72px;
+  padding: 14px 16px;
+  border: 1px solid rgba(217, 210, 195, 0.88);
+  border-radius: 8px;
+  color: var(--muted);
+  line-height: 1.45;
+  background: rgba(255, 255, 255, 0.66);
+}
+
 @media (max-width: 760px) {
   .page-shell {
     width: min(100% - 24px, 1120px);
     padding-top: 44px;
+  }
+
+  .intro {
+    grid-template-columns: 1fr;
+  }
+
+  .protocol-diagram {
+    min-height: 260px;
+  }
+
+  .diagram-node.source {
+    left: 20px;
+  }
+
+  .diagram-node.witness {
+    right: 20px;
+  }
+
+  .diagram-node.debt {
+    top: 126px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .diagram-node.refusal {
+    bottom: 26px;
+    left: 20px;
+  }
+
+  .diagram-node.memory {
+    right: 20px;
+    bottom: 26px;
   }
 
   .unit-grid {
@@ -310,7 +468,8 @@ button:disabled {
 
   .lab-header,
   .lab-form,
-  .result-lists {
+  .result-lists,
+  .reflection-panel ul {
     grid-template-columns: 1fr;
   }
 

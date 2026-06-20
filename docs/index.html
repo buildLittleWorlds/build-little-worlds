@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Build Little Worlds</title>
+    <title>Build Little Worlds | Citation Protocol Lab</title>
     <meta
       name="description"
-      content="Build Little Worlds is a world-building project about small composable units: spells, terrain, rules, rituals, institutions, economies, interfaces, and narrative mechanisms."
+      content="Build Little Worlds is a world-building experiment about citation protocols: alternate rules, rituals, obligations, interfaces, and consequences for scholarly worlds."
     >
     <link rel="stylesheet" href="styles.css">
     <script type="module" src="app.js"></script>
@@ -14,44 +14,54 @@
   <body>
     <main class="page-shell">
       <section class="intro" aria-labelledby="site-title">
-        <p class="eyebrow">World-building as composability</p>
-        <h1 id="site-title">Build Little Worlds</h1>
-        <p class="lede">
-          A home for tiny, durable pieces of imagined worlds: spells, terrain,
-          rituals, rules, constraints, institutions, economies, interfaces, and
-          narrative mechanisms that can snap together into something larger.
-        </p>
+        <div class="intro-copy">
+          <p class="eyebrow">World-building beyond maps and magic</p>
+          <h1 id="site-title">Build Little Worlds</h1>
+          <p class="lede">
+            What if citation worked differently? This lab treats citation as a
+            world-building primitive: a compact system of rules, rituals,
+            obligations, interfaces, refusals, and consequences that can make
+            scholarship feel like it belongs to another world.
+          </p>
+        </div>
+        <div class="protocol-diagram" aria-label="Citation protocol elements">
+          <span class="diagram-node source">source</span>
+          <span class="diagram-node witness">witness</span>
+          <span class="diagram-node debt">debt</span>
+          <span class="diagram-node refusal">refusal</span>
+          <span class="diagram-node memory">memory</span>
+        </div>
       </section>
 
-      <section class="unit-grid" aria-label="Composable world-building units">
+      <section class="unit-grid" aria-label="Citation-world primitives">
         <article>
-          <h2>Concrete Pieces</h2>
-          <p>Magic spells, landmarks, species, weather, materials, maps, tools, and terrain.</p>
+          <h2>Protocols</h2>
+          <p>Who must name a source, when a claim becomes citeable, and what form acknowledgement can take.</p>
         </article>
         <article>
-          <h2>System Pieces</h2>
-          <p>Rules, economies, institutions, rituals, incentives, histories, and patterns of power.</p>
+          <h2>Obligations</h2>
+          <p>Debts, permissions, duties, refusals, and penalties that make citation socially binding.</p>
         </article>
         <article>
-          <h2>Stranger Pieces</h2>
-          <p>Interfaces, taboos, metaphors, habits, failure modes, obligations, and ways of knowing.</p>
+          <h2>Interfaces</h2>
+          <p>Marks, ledgers, ceremonies, memory systems, annotations, and source machines that scholarship passes through.</p>
         </article>
       </section>
 
       <section class="note" aria-labelledby="next-title">
-        <h2 id="next-title">What Comes Next</h2>
+        <h2 id="next-title">The Experiment</h2>
         <p>
-          This is a public placeholder while the site takes shape. The first
-          full version will support learning, collecting, and combining small
-          world-building units. Private access and member workflows will come
-          later on infrastructure built for authentication.
+          A research paper usually treats citation as a parenthetical note,
+          footnote, endnote, or bibliography entry. Here, citation becomes the
+          atom of a world: a protocol for memory, authority, responsibility,
+          evidence, inheritance, and dissent.
         </p>
       </section>
 
       <section class="lab" aria-labelledby="lab-title">
         <div class="lab-header">
           <p class="eyebrow">Private model gateway</p>
-          <h2 id="lab-title">Unit Generator</h2>
+          <h2 id="lab-title">Citation Protocol Generator</h2>
           <p id="lab-status" aria-live="polite">Ready</p>
         </div>
 
@@ -69,16 +79,13 @@
           <label>
             Kind
             <select name="kind" required>
-              <option value="spell">Spell</option>
-              <option value="place">Place</option>
-              <option value="faction">Faction</option>
-              <option value="ritual">Ritual</option>
-              <option value="rule">Rule</option>
-              <option value="object">Object</option>
-              <option value="economy">Economy</option>
-              <option value="interface">Interface</option>
-              <option value="material">Material</option>
-              <option value="creature">Creature</option>
+              <option value="protocol">Protocol</option>
+              <option value="obligation">Obligation</option>
+              <option value="evidence-ritual">Evidence Ritual</option>
+              <option value="memory-system">Memory System</option>
+              <option value="authority-rule">Authority Rule</option>
+              <option value="refusal-custom">Refusal Custom</option>
+              <option value="source-interface">Source Interface</option>
               <option value="institution">Institution</option>
               <option value="custom">Custom</option>
             </select>
@@ -91,11 +98,11 @@
               maxlength="1000"
               rows="5"
               required
-              placeholder="a village where doors remember who knocked first"
+              placeholder="a university where every citation must name what it failed to preserve"
             ></textarea>
           </label>
 
-          <button type="submit">Generate Unit</button>
+          <button type="submit">Generate Protocol</button>
         </form>
 
         <article id="result-panel" class="result-panel" hidden>
@@ -104,7 +111,7 @@
           <p id="result-summary"></p>
           <div class="result-lists">
             <div>
-              <h4>Components</h4>
+              <h4>Protocol Parts</h4>
               <ul id="result-components"></ul>
             </div>
             <div>
@@ -114,6 +121,16 @@
           </div>
         </article>
 
+        <section id="reflection-panel" class="reflection-panel" aria-labelledby="reflection-title" hidden>
+          <p class="eyebrow">Reflection</p>
+          <h3 id="reflection-title">Stress-test the protocol</h3>
+          <ul>
+            <li>What counts as a source in this world?</li>
+            <li>Who is obligated to cite, and who can refuse?</li>
+            <li>What happens when citation fails, lies, or disappears?</li>
+            <li>What kind of scholarship would this protocol make possible?</li>
+          </ul>
+        </section>
       </section>
     </main>
   </body>

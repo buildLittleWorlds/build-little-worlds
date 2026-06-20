@@ -11,19 +11,29 @@ const env = {
 
 test("validatePayload applies defaults and allowlists", () => {
   const result = validatePayload({
-    kind: "Spell",
-    prompt: "a lantern that remembers roads",
+    kind: "Protocol",
+    prompt: "a university where every citation names what it failed to preserve",
   });
 
   assert.equal(result.ok, true);
-  assert.equal(result.value.kind, "spell");
+  assert.equal(result.value.kind, "protocol");
   assert.equal(result.value.model, "gemini-3.5-flash");
+});
+
+test("validatePayload rejects old fantasy unit kinds", () => {
+  const result = validatePayload({
+    kind: "spell",
+    prompt: "a lantern",
+  });
+
+  assert.equal(result.ok, false);
+  assert.equal(result.body.error, "bad_kind");
 });
 
 test("validatePayload rejects unknown models", () => {
   const result = validatePayload({
-    kind: "spell",
-    prompt: "a lantern",
+    kind: "protocol",
+    prompt: "a footnote that must be witnessed",
     provider: "gemini",
     model: "not-real",
   });
@@ -36,8 +46,8 @@ test("gateway rejects requests without the private access token", async () => {
   const request = new Request("https://api.example.com/api/generate-unit", {
     method: "POST",
     body: JSON.stringify({
-      kind: "spell",
-      prompt: "a lantern",
+      kind: "protocol",
+      prompt: "a footnote that must be witnessed",
     }),
   });
 
@@ -48,7 +58,7 @@ test("gateway rejects requests without the private access token", async () => {
   assert.equal(body.error, "unauthorized");
 });
 
-test("gateway calls Gemini and normalizes a world unit", async (t) => {
+test("gateway calls Gemini and normalizes a citation protocol", async (t) => {
   const originalFetch = globalThis.fetch;
   t.after(() => {
     globalThis.fetch = originalFetch;
@@ -63,6 +73,14 @@ test("gateway calls Gemini and normalizes a world unit", async (t) => {
       requestBody.generationConfig.responseJsonSchema.required,
       ["title", "summary", "components", "tags"],
     );
+    assert.match(
+      requestBody.systemInstruction.parts[0].text,
+      /compact citation protocols/,
+    );
+    assert.match(
+      requestBody.contents[0].parts[0].text,
+      /Citation protocol kind: protocol/,
+    );
 
     return new Response(
       JSON.stringify({
@@ -72,10 +90,10 @@ test("gateway calls Gemini and normalizes a world unit", async (t) => {
               parts: [
                 {
                   text: JSON.stringify({
-                    title: "Roadmemory Lantern",
-                    summary: "A brass lantern that glows brighter on paths its bearer has taken before.",
-                    components: ["warm brass cage", "map-smoke wick", "remembered crossroads"],
-                    tags: ["spell", "travel", "memory"],
+                    title: "The Unpreserved Source Rule",
+                    summary: "Every citation must name the part of the source that the scholar could not carry forward.",
+                    components: ["loss clause", "witness mark", "repair interval"],
+                    tags: ["protocol", "memory", "responsibility"],
                   }),
                 },
               ],
@@ -95,8 +113,8 @@ test("gateway calls Gemini and normalizes a world unit", async (t) => {
       Origin: "https://www.buildlittleworlds.com",
     },
     body: JSON.stringify({
-      kind: "spell",
-      prompt: "a lantern that remembers roads",
+      kind: "protocol",
+      prompt: "a university where every citation names what it failed to preserve",
     }),
   });
 
@@ -105,8 +123,8 @@ test("gateway calls Gemini and normalizes a world unit", async (t) => {
 
   assert.equal(response.status, 200);
   assert.equal(response.headers.get("Access-Control-Allow-Origin"), "https://www.buildlittleworlds.com");
-  assert.equal(body.title, "Roadmemory Lantern");
+  assert.equal(body.title, "The Unpreserved Source Rule");
   assert.equal(body.rawProvider, "gemini");
   assert.equal(body.model, "gemini-3.5-flash");
-  assert.deepEqual(body.tags, ["spell", "travel", "memory"]);
+  assert.deepEqual(body.tags, ["protocol", "memory", "responsibility"]);
 });

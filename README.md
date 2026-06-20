@@ -38,6 +38,7 @@ Recommended first deployment:
 The Worker exposes:
 
 - `POST /api/generate-unit`
+- `POST /api/combine-protocols`
 - `GET /api/health`
 
 Gemini calls use structured JSON output with a response schema, so the gateway
@@ -190,3 +191,16 @@ networksetup -setdnsservers Wi-Fi 1.1.1.1 8.8.8.8
 ## Archive
 
 `_source-archive/vercel-live-2026-06-18/` contains a snapshot of the public Vercel-hosted page that was live before this GitHub Pages placeholder replaced it.
+
+## Course Materials
+
+The public student path now lives entirely in `docs/`:
+
+- `index.html`: the main citation protocol generator and entry point.
+- `combinator.html`: the bench for colliding protocols, breeding customs, and
+  exporting/importing a lineage JSON file.
+- `readings.html`: a static reader that loads `MODULE.md`, `COMBINATOR.md`, and
+  `BESTIARY.md` with a generated table of contents.
+
+This keeps the course packet source-readable as Markdown while still giving
+students a navigable web reading experience from the main page.

@@ -1,6 +1,9 @@
 const DEFAULT_API_PATH = "/api/generate-unit";
+const COMBINE_API_PATH = "/api/combine-protocols";
 const MAX_PROMPT_CHARS = 1000;
 const MAX_COMPONENTS = 6;
+const MIN_COMBINE_PROTOCOLS = 2;
+const MAX_COMBINE_PROTOCOLS = 4;
 const DEFAULT_RATE_LIMIT_PER_HOUR = 30;
 const DEFAULT_MODEL = "gemini-3.5-flash";
 
@@ -49,6 +52,60 @@ const SYSTEM_PROMPT = [
   "Avoid proper nouns from copyrighted fictional worlds.",
 ].join("\n");
 
+const COMBINE_RESPONSE_SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  properties: {
+    world: { type: "string" },
+    conflicts: {
+      type: "array",
+      minItems: 1,
+      maxItems: 4,
+      items: {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          tension: { type: "string" },
+          stakes: { type: "string" },
+        },
+        required: ["tension", "stakes"],
+      },
+    },
+    emergent_customs: {
+      type: "array",
+      minItems: 1,
+      maxItems: 4,
+      items: {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          name: { type: "string" },
+          rule: { type: "string" },
+          born_from: { type: "string" },
+          seed: { type: "string" },
+        },
+        required: ["name", "rule", "born_from", "seed"],
+      },
+    },
+    dissent: { type: "string" },
+  },
+  required: ["world", "conflicts", "emergent_customs", "dissent"],
+};
+
+const COMBINE_SYSTEM_PROMPT = [
+  "You are a comparative scholar of citation systems for a world-building lab.",
+  "You are given two or more citation protocols. Do NOT merge them into a tidy synthesis.",
+  "Hold them in the same world and report, with precision, where they cannot both be obeyed.",
+  "Return exactly one compact JSON object matching this schema:",
+  JSON.stringify(COMBINE_RESPONSE_SCHEMA),
+  "world: one short paragraph describing the shared scholarly world these protocols now co-govern.",
+  "conflicts: each is a GENUINE contradiction. 'tension' states the incompatibility; 'stakes' names the exact situation that forces a scholar to choose. No vague friction.",
+  "emergent_customs: the habits, workarounds, taboos, and rituals scholars would actually develop to live INSIDE the contradiction. Not fixes that dissolve the tension — customs that endure it.",
+  "Each custom's 'born_from' names which parent parts it reconciles. Each custom's 'seed' is a short prompt string (under 200 chars) that could generate this custom as its own standalone protocol.",
+  "dissent: the single strongest objection a scholar in this world would raise against how these protocols combine.",
+  "Be concrete and specific. Avoid proper nouns from copyrighted fictional worlds.",
+].join("\n");
+
 const rateLimitBuckets = new Map();
 
 export default {
@@ -77,7 +134,10 @@ export async function handleRequest(request, env = {}, ctx = {}) {
     );
   }
 
-  if (request.method !== "POST" || url.pathname !== DEFAULT_API_PATH) {
+  const isGenerate = request.method === "POST" && url.pathname === DEFAULT_API_PATH;
+  const isCombine = request.method === "POST" && url.pathname === COMBINE_API_PATH;
+
+  if (!isGenerate && !isCombine) {
     return jsonResponse(
       { error: "not_found", message: "No route matches this request." },
       { status: 404, headers: corsHeaders },
@@ -113,6 +173,12 @@ export async function handleRequest(request, env = {}, ctx = {}) {
     );
   }
 
+  return isCombine
+    ? handleCombine(payload, env, ctx, corsHeaders)
+    : handleGenerate(payload, env, ctx, corsHeaders);
+}
+
+async function handleGenerate(payload, env, ctx, corsHeaders) {
   const validation = validatePayload(payload);
   if (!validation.ok) {
     return jsonResponse(validation.body, {
@@ -138,6 +204,44 @@ export async function handleRequest(request, env = {}, ctx = {}) {
     return jsonResponse(body, { headers: corsHeaders });
   } catch (error) {
     logRequest({ ok: false, kind, provider, model, startedAt, ctx, error });
+    return jsonResponse(
+      {
+        error: "provider_error",
+        message: readableProviderError(error),
+        rawProvider: provider,
+        model,
+      },
+      { status: error.status || 502, headers: corsHeaders },
+    );
+  }
+}
+
+async function handleCombine(payload, env, ctx, corsHeaders) {
+  const validation = validateCombinePayload(payload);
+  if (!validation.ok) {
+    return jsonResponse(validation.body, {
+      status: 400,
+      headers: corsHeaders,
+    });
+  }
+
+  const startedAt = Date.now();
+  const { protocols, model } = validation.value;
+  const provider = "gemini";
+
+  try {
+    const generated = await combineWithGemini({ protocols, model, env });
+
+    const body = normalizeCollision({
+      collision: generated.collision,
+      rawProvider: provider,
+      model,
+    });
+
+    logRequest({ ok: true, kind: "combine", provider, model, startedAt, ctx });
+    return jsonResponse(body, { headers: corsHeaders });
+  } catch (error) {
+    logRequest({ ok: false, kind: "combine", provider, model, startedAt, ctx, error });
     return jsonResponse(
       {
         error: "provider_error",
@@ -195,6 +299,65 @@ export function validatePayload(payload) {
   }
 
   return { ok: true, value: { kind, prompt, model } };
+}
+
+export function validateCombinePayload(payload) {
+  const rawProtocols = Array.isArray(payload?.protocols) ? payload.protocols : null;
+  const requestedModel =
+    typeof payload?.model === "string" ? payload.model.trim() : "";
+  const model = requestedModel || DEFAULT_MODEL;
+
+  if (!rawProtocols) {
+    return {
+      ok: false,
+      body: {
+        error: "bad_protocols",
+        message: "Field 'protocols' must be an array.",
+      },
+    };
+  }
+
+  const protocols = rawProtocols
+    .map(sanitizeProtocolInput)
+    .filter((protocol) => protocol && protocol.title);
+
+  if (
+    protocols.length < MIN_COMBINE_PROTOCOLS ||
+    protocols.length > MAX_COMBINE_PROTOCOLS
+  ) {
+    return {
+      ok: false,
+      body: {
+        error: "bad_protocols",
+        message: `Provide between ${MIN_COMBINE_PROTOCOLS} and ${MAX_COMBINE_PROTOCOLS} protocols, each with a title.`,
+      },
+    };
+  }
+
+  if (model !== DEFAULT_MODEL) {
+    return {
+      ok: false,
+      body: {
+        error: "bad_model",
+        message: `Model must be ${DEFAULT_MODEL}.`,
+      },
+    };
+  }
+
+  return { ok: true, value: { protocols, model } };
+}
+
+function sanitizeProtocolInput(raw) {
+  if (!raw || typeof raw !== "object") {
+    return null;
+  }
+  const title = typeof raw.title === "string" ? raw.title.trim().slice(0, 160) : "";
+  const summary =
+    typeof raw.summary === "string" ? raw.summary.trim().slice(0, 600) : "";
+  const components = Array.isArray(raw.components)
+    ? raw.components.slice(0, MAX_COMPONENTS).map((c) => String(c).slice(0, 120)).filter(Boolean)
+    : [];
+  return { title, summary, components };
 }
 
 async function generateWithGemini({ kind, prompt, model, env }) {
@@ -260,6 +423,99 @@ function normalizeCitationProtocol({ unit, rawProvider, model }) {
     summary: String(unit.summary || "").slice(0, 1200),
     components,
     tags,
+    rawProvider,
+    model,
+  };
+}
+
+async function combineWithGemini({ protocols, model, env }) {
+  if (!env.GEMINI_API_KEY) {
+    throw providerError("Gemini is not configured on this API gateway.", 500);
+  }
+
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-goog-api-key": env.GEMINI_API_KEY,
+      },
+      body: JSON.stringify({
+        systemInstruction: {
+          parts: [{ text: COMBINE_SYSTEM_PROMPT }],
+        },
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: buildCombinePrompt(protocols) }],
+          },
+        ],
+        generationConfig: {
+          temperature: 0.85,
+          maxOutputTokens: 1100,
+          responseMimeType: "application/json",
+          responseJsonSchema: COMBINE_RESPONSE_SCHEMA,
+        },
+      }),
+    },
+  );
+
+  const body = await readJsonResponse(response);
+  if (!response.ok) {
+    throw providerError(extractErrorMessage(body, "Gemini request failed."), response.status);
+  }
+
+  const text = body?.candidates?.[0]?.content?.parts?.map((part) => part.text || "").join("") || "";
+  return { collision: parseModelJson(text) };
+}
+
+function buildCombinePrompt(protocols) {
+  const lines = ["Collide these citation protocols into one shared scholarly world.", ""];
+  protocols.forEach((protocol, index) => {
+    lines.push(`Protocol ${index + 1}: ${protocol.title}`);
+    if (protocol.summary) {
+      lines.push(`Summary: ${protocol.summary}`);
+    }
+    if (protocol.components.length) {
+      lines.push(`Parts: ${protocol.components.join(", ")}`);
+    }
+    lines.push("");
+  });
+  lines.push(
+    "Report the genuine contradictions and the customs scholars would invent to live inside them.",
+  );
+  return lines.join("\n");
+}
+
+function normalizeCollision({ collision, rawProvider, model }) {
+  const conflicts = Array.isArray(collision.conflicts)
+    ? collision.conflicts
+        .slice(0, 4)
+        .map((conflict) => ({
+          tension: String(conflict?.tension || "").slice(0, 600),
+          stakes: String(conflict?.stakes || "").slice(0, 600),
+        }))
+        .filter((conflict) => conflict.tension)
+    : [];
+
+  const emergentCustoms = Array.isArray(collision.emergent_customs)
+    ? collision.emergent_customs
+        .slice(0, 4)
+        .map((custom) => ({
+          name: String(custom?.name || "Untitled Custom").slice(0, 160),
+          rule: String(custom?.rule || "").slice(0, 600),
+          born_from: String(custom?.born_from || "").slice(0, 300),
+          seed: String(custom?.seed || "").slice(0, 240),
+        }))
+        .filter((custom) => custom.rule)
+    : [];
+
+  return {
+    world: String(collision.world || "").slice(0, 1200),
+    conflicts,
+    emergent_customs: emergentCustoms,
+    dissent: String(collision.dissent || "").slice(0, 600),
     rawProvider,
     model,
   };

@@ -3,164 +3,73 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Build Little Worlds | Citation Protocol Lab</title>
+    <title>Build Little Worlds | Philip Rieff Blog</title>
     <meta
       name="description"
-      content="Build Little Worlds is a world-building experiment about citation protocols: alternate rules, rituals, obligations, interfaces, and consequences for scholarly worlds."
+      content="A blog about exploring Philip Rieff's work through small scholarly primitives: citations, paper ideas, and paragraphs."
     >
     <link rel="stylesheet" href="styles.css">
     <script type="module" src="app.js"></script>
   </head>
   <body>
     <main class="page-shell">
-      <nav class="site-nav primary-nav" aria-label="Site">
-        <a href="index.html" aria-current="page">Generator</a>
-        <a href="combinator.html">Combinator</a>
-        <a href="readings.html">Readings</a>
-      </nav>
+      <header class="site-header">
+        <a class="site-mark" href="index.html">Build Little Worlds</a>
+      </header>
 
-      <section class="intro" aria-labelledby="site-title">
-        <div class="intro-copy">
-          <p class="eyebrow">World-building beyond maps and magic</p>
-          <h1 id="site-title">Build Little Worlds</h1>
-          <p class="lede">
-            What if citation worked differently? This lab treats citation as a
-            world-building primitive: a compact system of rules, rituals,
-            obligations, interfaces, refusals, and consequences that can make
-            scholarship feel like it belongs to another world.
-          </p>
-        </div>
-        <div class="protocol-diagram" aria-label="Citation protocol elements">
-          <span class="diagram-node source">source</span>
-          <span class="diagram-node witness">witness</span>
-          <span class="diagram-node debt">debt</span>
-          <span class="diagram-node refusal">refusal</span>
-          <span class="diagram-node memory">memory</span>
-        </div>
-      </section>
-
-      <section class="unit-grid" aria-label="Citation-world primitives">
-        <article>
-          <h2>Protocols</h2>
-          <p>Who must name a source, when a claim becomes citeable, and what form acknowledgement can take.</p>
-        </article>
-        <article>
-          <h2>Obligations</h2>
-          <p>Debts, permissions, duties, refusals, and penalties that make citation socially binding.</p>
-        </article>
-        <article>
-          <h2>Interfaces</h2>
-          <p>Marks, ledgers, ceremonies, memory systems, annotations, and source machines that scholarship passes through.</p>
-        </article>
-      </section>
-
-      <section class="note" aria-labelledby="next-title">
-        <h2 id="next-title">The Experiment</h2>
-        <p>
-          A research paper usually treats citation as a parenthetical note,
-          footnote, endnote, or bibliography entry. Here, citation becomes the
-          atom of a world: a protocol for memory, authority, responsibility,
-          evidence, inheritance, and dissent.
+      <section class="hero" aria-labelledby="site-title">
+        <p class="eyebrow">A blog about Philip Rieff, built from primitives</p>
+        <h1 id="site-title">Build Little Worlds</h1>
+        <p class="lede">
+          This site is a slow experiment in studying a scholar's work one small
+          object at a time. For now the scholar is Philip Rieff, and the objects
+          are deliberately modest: a citation, a paper idea, a paragraph, a
+          question that can bear more weight later.
         </p>
       </section>
 
-      <section class="course-path" aria-labelledby="course-path-title">
-        <div class="course-path-header">
-          <p class="eyebrow">For course use</p>
-          <h2 id="course-path-title">Build, collide, then read the theory</h2>
-        </div>
-        <div class="course-path-grid">
-          <a class="path-card" href="#lab-title">
-            <span>1</span>
-            <strong>Generate a protocol</strong>
-            <small>Start with one citation rule and its parts.</small>
-          </a>
-          <a class="path-card" href="combinator.html">
-            <span>2</span>
-            <strong>Open the Combinator</strong>
-            <small>Collide protocols, breed customs, export a lineage.</small>
-          </a>
-          <a class="path-card" href="readings.html">
-            <span>3</span>
-            <strong>Read the module</strong>
-            <small>Use the course text, bestiary, and design notes.</small>
-          </a>
-        </div>
+      <section class="primitive-band" aria-label="Scholarly primitives">
+        <article class="primitive-card">
+          <span>Citation</span>
+          <h2>A place to stand</h2>
+          <p>A source marker, a quotation to verify, or a secondary trail that gives the project a concrete foothold.</p>
+        </article>
+        <article class="primitive-card">
+          <span>Paper Idea</span>
+          <h2>A possible argument</h2>
+          <p>A small research proposal: not yet an essay, but precise enough to gather sources and objections.</p>
+        </article>
+        <article class="primitive-card">
+          <span>Paragraph</span>
+          <h2>A unit of thought</h2>
+          <p>A short interpretive passage about one idea, built so it can later become a section, lecture, or paper.</p>
+        </article>
       </section>
 
-      <section class="lab" aria-labelledby="lab-title">
-        <div class="lab-header">
-          <p class="eyebrow">Private model gateway</p>
-          <h2 id="lab-title">Citation Protocol Generator</h2>
-          <p id="lab-status" aria-live="polite">Ready</p>
-        </div>
+      <section class="section-heading" aria-labelledby="posts-title">
+        <p class="eyebrow">Notebook</p>
+        <h2 id="posts-title">Latest primitives</h2>
+        <p>
+          These first entries are scaffolds. They name the kind of scholarly
+          object this blog will cultivate before claiming to have finished the
+          scholarship.
+        </p>
+      </section>
 
-        <form id="unit-form" class="lab-form">
-          <label>
-            API URL
-            <input id="api-url" name="api-url" type="url" autocomplete="off" required>
-          </label>
+      <section id="post-list" class="post-grid" aria-live="polite">
+        <p>Loading posts...</p>
+      </section>
 
-          <label>
-            Access Token
-            <input id="access-token" name="access-token" type="password" autocomplete="off" required>
-          </label>
-
-          <label>
-            Kind
-            <select name="kind" required>
-              <option value="protocol">Protocol</option>
-              <option value="obligation">Obligation</option>
-              <option value="evidence-ritual">Evidence Ritual</option>
-              <option value="memory-system">Memory System</option>
-              <option value="authority-rule">Authority Rule</option>
-              <option value="refusal-custom">Refusal Custom</option>
-              <option value="source-interface">Source Interface</option>
-              <option value="institution">Institution</option>
-              <option value="custom">Custom</option>
-            </select>
-          </label>
-
-          <label class="wide">
-            Seed
-            <textarea
-              name="prompt"
-              maxlength="1000"
-              rows="5"
-              required
-              placeholder="a university where every citation must name what it failed to preserve"
-            ></textarea>
-          </label>
-
-          <button type="submit">Generate Protocol</button>
-        </form>
-
-        <article id="result-panel" class="result-panel" hidden>
-          <p id="result-meta" class="result-meta"></p>
-          <h3 id="result-title"></h3>
-          <p id="result-summary"></p>
-          <div class="result-lists">
-            <div>
-              <h4>Protocol Parts</h4>
-              <ul id="result-components"></ul>
-            </div>
-            <div>
-              <h4>Tags</h4>
-              <ul id="result-tags" class="tag-list"></ul>
-            </div>
-          </div>
-        </article>
-
-        <section id="reflection-panel" class="reflection-panel" aria-labelledby="reflection-title" hidden>
-          <p class="eyebrow">Reflection</p>
-          <h3 id="reflection-title">Stress-test the protocol</h3>
-          <ul>
-            <li>What counts as a source in this world?</li>
-            <li>Who is obligated to cite, and who can refuse?</li>
-            <li>What happens when citation fails, lies, or disappears?</li>
-            <li>What kind of scholarship would this protocol make possible?</li>
-          </ul>
-        </section>
+      <section class="about-panel" aria-labelledby="about-title">
+        <p class="eyebrow">About the method</p>
+        <h2 id="about-title">Small pieces before systems</h2>
+        <p>
+          The premise is simple: a scholar's work can be explored by building
+          tiny, inspectable worlds around its ideas. A citation is one world. A
+          paragraph is another. A paper idea is a third. Over time, these pieces
+          should become a richer map of Rieff's vocabulary, tensions, and
+          intellectual afterlives.
+        </p>
       </section>
     </main>
   </body>

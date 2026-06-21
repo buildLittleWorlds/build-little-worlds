@@ -1,0 +1,38 @@
+[
+  {
+    "order": 1,
+    "title": "Why Rieff, Why Little Worlds",
+    "date": "2026-06-21",
+    "slug": "why-rieff",
+    "primitive": "Paper Idea",
+    "description": "A first scaffold for why Philip Rieff is a good test case for building scholarship from small, revisable primitives.",
+    "file": "posts/001-why-rieff.md"
+  },
+  {
+    "order": 2,
+    "title": "Citation as Primitive",
+    "date": "2026-06-21",
+    "slug": "citation-as-primitive",
+    "primitive": "Citation",
+    "description": "A placeholder for turning one verified Rieff citation into a small world of context, question, and use.",
+    "file": "posts/002-citation-as-primitive.md"
+  },
+  {
+    "order": 3,
+    "title": "A Paper Idea as a Little World",
+    "date": "2026-06-21",
+    "slug": "paper-idea-as-little-world",
+    "primitive": "Paper Idea",
+    "description": "A sketch of how a research question about Rieff can stay small enough to test before becoming an essay.",
+    "file": "posts/003-paper-idea-as-little-world.md"
+  },
+  {
+    "order": 4,
+    "title": "Paragraph as Experiment",
+    "date": "2026-06-21",
+    "slug": "paragraph-as-experiment",
+    "primitive": "Paragraph",
+    "description": "A prototype paragraph workflow: make one claim, name the needed source, and leave room for revision.",
+    "file": "posts/004-paragraph-as-experiment.md"
+  }
+]

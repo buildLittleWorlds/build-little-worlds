@@ -1,11 +1,14 @@
 # Build Little Worlds
 
-Build Little Worlds is a public experimental lab for world-building through
-abstract primitives. The current version asks what citation could become if a
-scholarly world built its rules, rituals, obligations, interfaces, and
-consequences differently.
+Build Little Worlds is now a static blog about exploring Philip Rieff's work
+through small scholarly primitives. The working primitives are citations, paper
+ideas, and paragraphs: small objects that can be verified, revised, and combined
+before they are asked to become a finished argument.
 
-The first version is intentionally static and deploys through GitHub Pages. It introduces the site direction while leaving room for a later authenticated experience.
+The public site is intentionally simple and deploys through GitHub Pages. The
+previous citation-protocol lab has been superseded by the blog reset; an
+archived copy exists outside this folder, and the private Worker remains in this
+repo only as dormant infrastructure for later AI experiments.
 
 ## Deployment
 
@@ -22,11 +25,27 @@ Hostinger.
 
 GitHub Pages can host static HTML, CSS, and JavaScript. It does not provide secure password-protected member areas by itself, so any future login or "password through me" access should be handled with an auth-capable platform or backend.
 
+## Blog Structure
+
+The public blog lives in `docs/`:
+
+- `index.html`: homepage, project framing, primitive categories, and post list.
+- `post.html`: lightweight Markdown post reader.
+- `app.js`: loads `posts.json`, renders the homepage list, and renders posts.
+- `posts.json`: post manifest with title, date, slug, primitive type, summary,
+  and source Markdown path.
+- `posts/`: source Markdown files for starter post scaffolds.
+- `CNAME`: GitHub Pages custom-domain configuration.
+
+The starter posts are intentionally labeled as scaffolds rather than finished
+scholarship. Exact Rieff citations and secondary-source trails should be added
+gradually as individual primitives mature.
+
 ## AI Experiment Gateway
 
-The static site in `docs/` now includes a private citation protocol generator.
-It calls a separate API gateway instead of calling Gemini directly from browser
-JavaScript.
+The public blog does not link to the AI gateway. The gateway is preserved for
+later private experiments and still calls a separate Cloudflare Worker instead
+of exposing provider keys in browser JavaScript.
 
 Recommended first deployment:
 
@@ -191,16 +210,3 @@ networksetup -setdnsservers Wi-Fi 1.1.1.1 8.8.8.8
 ## Archive
 
 `_source-archive/vercel-live-2026-06-18/` contains a snapshot of the public Vercel-hosted page that was live before this GitHub Pages placeholder replaced it.
-
-## Course Materials
-
-The public student path now lives entirely in `docs/`:
-
-- `index.html`: the main citation protocol generator and entry point.
-- `combinator.html`: the bench for colliding protocols, breeding customs, and
-  exporting/importing a lineage JSON file.
-- `readings.html`: a static reader that loads `MODULE.md`, `COMBINATOR.md`, and
-  `BESTIARY.md` with a generated table of contents.
-
-This keeps the course packet source-readable as Markdown while still giving
-students a navigable web reading experience from the main page.

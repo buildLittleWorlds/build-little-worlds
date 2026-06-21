@@ -72,7 +72,7 @@ async function loadPosts() {
 
   return posts.slice().sort((a, b) => {
     const dateCompare = String(b.date || "").localeCompare(String(a.date || ""));
-    return dateCompare || Number(a.order || 0) - Number(b.order || 0);
+    return dateCompare || Number(b.order || 0) - Number(a.order || 0);
   });
 }
 

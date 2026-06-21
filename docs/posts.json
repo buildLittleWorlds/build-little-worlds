@@ -1,38 +1,38 @@
 [
   {
     "order": 1,
-    "title": "Why Rieff, Why Little Worlds",
+    "title": "Opening Note",
     "date": "2026-06-21",
-    "slug": "why-rieff",
-    "primitive": "Paper Idea",
-    "description": "A first scaffold for why Philip Rieff is a good test case for building scholarship from small, revisable primitives.",
-    "file": "posts/001-why-rieff.md"
+    "slug": "opening-note",
+    "category": "Reading note",
+    "description": "A brief statement of the blog's direction: reading Rieff, the therapeutic, and related scholars.",
+    "file": "posts/001-opening-note.md"
   },
   {
     "order": 2,
-    "title": "Citation as Primitive",
+    "title": "Rieff and the Therapeutic",
     "date": "2026-06-21",
-    "slug": "citation-as-primitive",
-    "primitive": "Citation",
-    "description": "A placeholder for turning one verified Rieff citation into a small world of context, question, and use.",
-    "file": "posts/002-citation-as-primitive.md"
+    "slug": "rieff-and-the-therapeutic",
+    "category": "Reading note",
+    "description": "A starting note on why the therapeutic is the central term to track while reading Rieff.",
+    "file": "posts/002-rieff-and-the-therapeutic.md"
   },
   {
     "order": 3,
-    "title": "A Paper Idea as a Little World",
+    "title": "Reading The Triumph of the Therapeutic",
     "date": "2026-06-21",
-    "slug": "paper-idea-as-little-world",
-    "primitive": "Paper Idea",
-    "description": "A sketch of how a research question about Rieff can stay small enough to test before becoming an essay.",
-    "file": "posts/003-paper-idea-as-little-world.md"
+    "slug": "reading-the-triumph-of-the-therapeutic",
+    "category": "Reading note",
+    "description": "A placeholder for slow notes on Rieff's best-known book.",
+    "file": "posts/003-reading-the-triumph-of-the-therapeutic.md"
   },
   {
     "order": 4,
-    "title": "Paragraph as Experiment",
+    "title": "Secondary Trails",
     "date": "2026-06-21",
-    "slug": "paragraph-as-experiment",
-    "primitive": "Paragraph",
-    "description": "A prototype paragraph workflow: make one claim, name the needed source, and leave room for revision.",
-    "file": "posts/004-paragraph-as-experiment.md"
+    "slug": "secondary-trails",
+    "category": "Reading note",
+    "description": "A note on keeping track of scholars who help clarify or challenge Rieff.",
+    "file": "posts/004-secondary-trails.md"
   }
 ]

@@ -1,14 +1,10 @@
-# Build Little Worlds
+# Therapeutic Reading Notes
 
-Build Little Worlds is now a static blog about exploring Philip Rieff's work
-through small scholarly primitives. The working primitives are citations, paper
-ideas, and paragraphs: small objects that can be verified, revised, and combined
-before they are asked to become a finished argument.
+This repository currently publishes a minimalist static blog titled
+**Therapeutic Reading Notes**. The site is for reading notes on Philip Rieff,
+the therapeutic, and related scholars.
 
-The public site is intentionally simple and deploys through GitHub Pages. The
-previous citation-protocol lab has been superseded by the blog reset; an
-archived copy exists outside this folder, and the private Worker remains in this
-repo only as dormant infrastructure for later AI experiments.
+The public site deploys through GitHub Pages from `docs/`.
 
 ## Deployment
 
@@ -19,194 +15,33 @@ repo only as dormant infrastructure for later AI experiments.
 - Active DNS provider: Hostinger nameservers (`ns1.dns-parking.com`, `ns2.dns-parking.com`)
 - Frontend host: GitHub Pages
 
-Vercel is no longer part of the active hosting path. The old Vercel aliases and
-domain object for `buildlittleworlds.com` were removed after DNS moved to
-Hostinger.
+Keep `docs/CNAME` unchanged unless the public domain changes.
 
-GitHub Pages can host static HTML, CSS, and JavaScript. It does not provide secure password-protected member areas by itself, so any future login or "password through me" access should be handled with an auth-capable platform or backend.
+## Site Structure
 
-## Blog Structure
+- `docs/index.html`: homepage with a short introduction and the ten most recent posts.
+- `docs/post.html`: Markdown post reader.
+- `docs/app.js`: loads `posts.json`, renders the homepage list, and renders posts.
+- `docs/posts.json`: post manifest with title, date, slug, summary, and source Markdown path.
+- `docs/posts/`: source Markdown files for reading notes.
+- `docs/background.html`: placeholder for background notes.
+- `docs/related-thinkers.html`: placeholder for related scholars.
+- `docs/about.html`: placeholder author/project page.
+- `docs/CNAME`: GitHub Pages custom-domain configuration.
 
-The public blog lives in `docs/`:
+## Local Development
 
-- `index.html`: homepage, project framing, primitive categories, and post list.
-- `post.html`: lightweight Markdown post reader.
-- `app.js`: loads `posts.json`, renders the homepage list, and renders posts.
-- `posts.json`: post manifest with title, date, slug, primitive type, summary,
-  and source Markdown path.
-- `posts/`: source Markdown files for starter post scaffolds.
-- `CNAME`: GitHub Pages custom-domain configuration.
-
-The starter posts are intentionally labeled as scaffolds rather than finished
-scholarship. Exact Rieff citations and secondary-source trails should be added
-gradually as individual primitives mature.
-
-## AI Experiment Gateway
-
-The public blog does not link to the AI gateway. The gateway is preserved for
-later private experiments and still calls a separate Cloudflare Worker instead
-of exposing provider keys in browser JavaScript.
-
-Recommended first deployment:
-
-- Frontend: keep GitHub Pages serving `docs/`
-- API: deploy the Cloudflare Worker in `worker/src/index.js`
-- Current API route: `https://build-little-worlds-api.profplate.workers.dev/api/generate-unit`
-- Future custom API route: `https://api.buildlittleworlds.com/api/generate-unit`
-
-The Worker exposes:
-
-- `POST /api/generate-unit`
-- `POST /api/combine-protocols`
-- `GET /api/health`
-
-Gemini calls use structured JSON output with a response schema, so the gateway
-can reliably parse the generated citation protocol before returning it to the
-browser.
-
-Request body:
-
-```json
-{
-  "kind": "protocol",
-  "prompt": "a university where every citation must name what it failed to preserve",
-  "provider": "gemini",
-  "model": "gemini-3.5-flash"
-}
-```
-
-Response body:
-
-```json
-{
-  "title": "The Unpreserved Source Rule",
-  "summary": "Every citation must name the part of the source that the scholar could not carry forward.",
-  "components": ["loss clause", "witness mark", "repair interval"],
-  "tags": ["protocol", "memory", "responsibility"],
-  "rawProvider": "gemini",
-  "model": "gemini-3.5-flash"
-}
-```
-
-### Secrets
-
-Set these as encrypted Worker secrets:
-
-```bash
-wrangler secret put BLW_ACCESS_TOKEN
-wrangler secret put GEMINI_API_KEY
-```
-
-`BLW_ACCESS_TOKEN` is the private token typed into the site UI. It protects the gateway from casual public use. It is not a Gemini API key.
-
-### Local Development
-
-Install dependencies:
-
-```bash
-npm install
-```
-
-Run tests:
-
-```bash
-npm test
-```
-
-Run the Worker locally:
-
-```bash
-npm run worker:dev
-```
-
-Serve the static page locally from `docs/`:
+Serve the static site locally:
 
 ```bash
 python3 -m http.server 8000 --directory docs
 ```
 
-Deploy the Worker:
+Run JavaScript and Worker tests:
 
 ```bash
-npm run worker:deploy
+npm test
 ```
 
-After deployment, use the `workers.dev` URL until the custom API hostname is
-ready. The attempted direct Worker custom-domain deploy for
-`api.buildlittleworlds.com` fails while `buildlittleworlds.com` is not active as
-a Cloudflare-managed zone. Keep provider keys restricted/audited in the Gemini
-dashboard.
-
-### Custom API Domain
-
-`api.buildlittleworlds.com` should not be added as a plain Hostinger CNAME to
-the `workers.dev` hostname. Cloudflare Worker Custom Domains require an active
-Cloudflare zone, and Worker Routes require a DNS record proxied through
-Cloudflare. The clean path for the friendly API hostname is:
-
-1. Add `buildlittleworlds.com` as a Cloudflare zone.
-2. Recreate the current GitHub Pages DNS records in Cloudflare.
-3. Change nameservers at Hostinger from Hostinger DNS to Cloudflare DNS.
-4. Add `api.buildlittleworlds.com` as a Worker Custom Domain.
-
-Until then, keep using:
-
-```text
-https://build-little-worlds-api.profplate.workers.dev/api/generate-unit
-```
-
-Hostinger's API page exposes MCP configuration for DNS automation. The DNS MCP
-server command shown in hPanel is:
-
-```json
-{
-  "command": "npx",
-  "args": ["--package=hostinger-api-mcp@latest", "hostinger-dns-mcp"]
-}
-```
-
-Using that automation requires generating a Hostinger API token in hPanel.
-
-## DNS Target
-
-Keep DNS managed at Hostinger unless intentionally moving the domain to another
-DNS provider. Do not point nameservers back to Vercel unless Vercel becomes the
-active host again.
-
-For GitHub Pages:
-
-- Apex `@` A records:
-  - `185.199.108.153`
-  - `185.199.109.153`
-  - `185.199.110.153`
-  - `185.199.111.153`
-- `www` CNAME:
-  - `buildlittleworlds.github.io`
-
-Do not add wildcard DNS records.
-
-### Current DNS Notes
-
-- `buildlittleworlds.com` is delegated at the `.com` registry to Hostinger.
-- Hostinger serves the GitHub Pages apex A records and the `www` CNAME.
-- GitHub Pages has HTTPS enabled and enforced for `www.buildlittleworlds.com`.
-- Some local routers or ISP resolvers may temporarily cache the old Vercel
-  nameserver path. If that happens, the site may fail locally until the cache
-  expires or the machine/router uses a fresh resolver such as `1.1.1.1` or
-  `8.8.8.8`.
-
-To restore automatic DNS on macOS Wi-Fi after using temporary manual resolvers:
-
-```bash
-networksetup -setdnsservers Wi-Fi Empty
-```
-
-To temporarily use known-good public resolvers during propagation:
-
-```bash
-networksetup -setdnsservers Wi-Fi 1.1.1.1 8.8.8.8
-```
-
-## Archive
-
-`_source-archive/vercel-live-2026-06-18/` contains a snapshot of the public Vercel-hosted page that was live before this GitHub Pages placeholder replaced it.
+The Cloudflare Worker remains in the repository for possible future private
+experiments, but it is not linked from the public site.

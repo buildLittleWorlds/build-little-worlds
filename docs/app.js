@@ -1,4 +1,6 @@
 const MANIFEST_URL = "posts.json";
+const SITE_TITLE = "Therapeutic Reading Notes";
+const MAX_HOME_POSTS = 10;
 
 const postList = document.querySelector("#post-list");
 const postBody = document.querySelector("#post-body");
@@ -14,7 +16,7 @@ if (postBody) {
 async function renderIndex() {
   try {
     const posts = await loadPosts();
-    postList.replaceChildren(...posts.map(renderPostCard));
+    postList.replaceChildren(...posts.slice(0, MAX_HOME_POSTS).map(renderPostCard));
   } catch (error) {
     postList.innerHTML = `<p class="notice">${escapeHtml(error.message || "Posts could not be loaded.")}</p>`;
   }
@@ -40,10 +42,9 @@ async function renderPost() {
 
     const markdown = await response.text();
     const rendered = renderMarkdown(markdown);
-    document.title = `${post.title} | Build Little Worlds`;
+    document.title = `${post.title} | ${SITE_TITLE}`;
     postBody.innerHTML = `
       <header class="post-header">
-        <p class="eyebrow">${escapeHtml(post.primitive)}</p>
         <h1>${escapeHtml(post.title)}</h1>
         <p class="post-meta">${formatDate(post.date)}</p>
         <p class="post-description">${escapeHtml(post.description)}</p>
@@ -79,10 +80,6 @@ function renderPostCard(post) {
   const article = document.createElement("article");
   article.className = "post-card";
 
-  const primitive = document.createElement("p");
-  primitive.className = "post-type";
-  primitive.textContent = post.primitive || "Primitive";
-
   const title = document.createElement("h3");
   const link = document.createElement("a");
   link.href = `post.html?slug=${encodeURIComponent(post.slug)}`;
@@ -96,24 +93,23 @@ function renderPostCard(post) {
   meta.className = "post-meta";
   meta.textContent = formatDate(post.date);
 
-  article.append(primitive, title, description, meta);
+  article.append(title, description, meta);
   return article;
 }
 
 function renderMissingPost(posts) {
-  document.title = "Post Not Found | Build Little Worlds";
+  document.title = `Post Not Found | ${SITE_TITLE}`;
   const links = posts
     .map((post) => `<li><a href="post.html?slug=${encodeURIComponent(post.slug)}">${escapeHtml(post.title)}</a></li>`)
     .join("");
 
   postBody.innerHTML = `
     <header class="post-header">
-      <p class="eyebrow">Missing primitive</p>
-      <h1>That post is not here yet.</h1>
+      <h1>Post not found</h1>
       <p class="post-description">The requested slug does not match a published post in the local manifest.</p>
     </header>
     <div class="markdown-body">
-      <p>Choose one of the current primitives instead:</p>
+      <p>Choose one of the current posts instead:</p>
       <ul>${links}</ul>
     </div>
   `;

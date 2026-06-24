@@ -1,38 +1,29 @@
 [
   {
-    "order": 1,
-    "title": "Opening Note",
-    "date": "2026-06-21",
-    "slug": "opening-note",
-    "category": "Reading note",
-    "description": "A brief statement of the blog's direction: reading Rieff, the therapeutic, and related scholars.",
-    "file": "posts/001-opening-note.md"
+    "order": 3,
+    "title": "Not Magic, But Math",
+    "date": "2026-06-24",
+    "slug": "not-magic-but-math",
+    "category": "The Beauty of the Language Machine",
+    "description": "A first orientation to LLMs as human mathematical artifacts rather than occult or alien minds.",
+    "file": "posts/001-not-magic-but-math.md"
   },
   {
     "order": 2,
-    "title": "Rieff and the Therapeutic",
-    "date": "2026-06-21",
-    "slug": "rieff-and-the-therapeutic",
-    "category": "Reading note",
-    "description": "A starting note on why the therapeutic is the central term to track while reading Rieff.",
-    "file": "posts/002-rieff-and-the-therapeutic.md"
+    "title": "From the Book of Nature to the Book of Language",
+    "date": "2026-06-24",
+    "slug": "book-of-nature-book-of-language",
+    "category": "The Beauty of the Language Machine",
+    "description": "If mathematics makes the natural world legible, LLMs suggest that language is mathematically legible too.",
+    "file": "posts/002-book-of-nature-book-of-language.md"
   },
   {
-    "order": 3,
-    "title": "Reading The Triumph of the Therapeutic",
-    "date": "2026-06-21",
-    "slug": "reading-the-triumph-of-the-therapeutic",
-    "category": "Reading note",
-    "description": "A placeholder for slow notes on Rieff's best-known book.",
-    "file": "posts/003-reading-the-triumph-of-the-therapeutic.md"
-  },
-  {
-    "order": 4,
-    "title": "Secondary Trails",
-    "date": "2026-06-21",
-    "slug": "secondary-trails",
-    "category": "Reading note",
-    "description": "A note on keeping track of scholars who help clarify or challenge Rieff.",
-    "file": "posts/004-secondary-trails.md"
+    "order": 1,
+    "title": "A Language Model Is a Probability Distribution",
+    "date": "2026-06-24",
+    "slug": "language-model-probability-distribution",
+    "category": "How LLMs Work",
+    "description": "A plain-language account of next-token prediction, probability, and why statistical language is not spiritually shallow.",
+    "file": "posts/003-language-model-probability-distribution.md"
   }
 ]

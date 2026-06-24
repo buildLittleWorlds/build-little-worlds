@@ -1,24 +1,30 @@
 const MANIFEST_URL = "posts.json";
-const SITE_TITLE = "Therapeutic Reading Notes";
-const MAX_HOME_POSTS = 10;
+const SITE_TITLE = "Theology of LLMs";
+const MAX_HOME_POSTS = 6;
 
 const postList = document.querySelector("#post-list");
+const blogList = document.querySelector("#blog-list");
 const postBody = document.querySelector("#post-body");
 
 if (postList) {
-  renderIndex();
+  renderPostList(postList, MAX_HOME_POSTS);
+}
+
+if (blogList) {
+  renderPostList(blogList);
 }
 
 if (postBody) {
   renderPost();
 }
 
-async function renderIndex() {
+async function renderPostList(container, limit = null) {
   try {
     const posts = await loadPosts();
-    postList.replaceChildren(...posts.slice(0, MAX_HOME_POSTS).map(renderPostCard));
+    const visiblePosts = limit ? posts.slice(0, limit) : posts;
+    container.replaceChildren(...visiblePosts.map(renderPostCard));
   } catch (error) {
-    postList.innerHTML = `<p class="notice">${escapeHtml(error.message || "Posts could not be loaded.")}</p>`;
+    container.innerHTML = `<p class="notice">${escapeHtml(error.message || "Posts could not be loaded.")}</p>`;
   }
 }
 
@@ -46,7 +52,7 @@ async function renderPost() {
     postBody.innerHTML = `
       <header class="post-header">
         <h1>${escapeHtml(post.title)}</h1>
-        <p class="post-meta">${formatDate(post.date)}</p>
+        <p class="post-meta">${formatDate(post.date)}${post.category ? ` / ${escapeHtml(post.category)}` : ""}</p>
         <p class="post-description">${escapeHtml(post.description)}</p>
       </header>
       <div class="markdown-body">${rendered}</div>
@@ -91,7 +97,7 @@ function renderPostCard(post) {
 
   const meta = document.createElement("p");
   meta.className = "post-meta";
-  meta.textContent = formatDate(post.date);
+  meta.textContent = `${formatDate(post.date)}${post.category ? ` / ${post.category}` : ""}`;
 
   article.append(title, description, meta);
   return article;
@@ -214,6 +220,7 @@ function renderMarkdown(markdown) {
 
 function renderInline(value) {
   return escapeHtml(value)
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" rel="noreferrer">$1</a>')
     .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
     .replace(/\*([^*]+)\*/g, "<em>$1</em>")
     .replace(/`([^`]+)`/g, "<code>$1</code>");

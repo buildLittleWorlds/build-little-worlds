@@ -1,5 +1,5 @@
 const MANIFEST_URL = "posts.json";
-const SITE_TITLE = "Theology of LLMs";
+const SITE_TITLE = "Build Little Worlds";
 const MAX_HOME_POSTS = 6;
 
 const postList = document.querySelector("#post-list");

@@ -1,5 +1,14 @@
 [
   {
+    "order": 4,
+    "title": "Little Worlds and Large Language Models",
+    "date": "2026-06-24",
+    "slug": "little-worlds-large-language-models",
+    "category": "Site frame",
+    "description": "The deeper frame for the site: small bounded forms, large orders, scale, language models, and the Logos.",
+    "file": "posts/004-little-worlds-large-language-models.md"
+  },
+  {
     "order": 3,
     "title": "Not Magic, But Math",
     "date": "2026-06-24",

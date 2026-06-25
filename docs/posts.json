@@ -1,5 +1,14 @@
 [
   {
+    "order": 5,
+    "title": "The Fallacy of the Unmediated World",
+    "date": "2026-06-25",
+    "slug": "fallacy-of-the-unmediated-world",
+    "category": "Theology of Technology",
+    "description": "Why the modern revolt against technology's mediation is built on a question-begging fallacy, and how to praise tools as participation in the Logos.",
+    "file": "posts/005-fallacy-of-the-unmediated-world.md"
+  },
+  {
     "order": 4,
     "title": "Little Worlds and Large Language Models",
     "date": "2026-06-24",

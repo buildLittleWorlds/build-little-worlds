@@ -1,0 +1,11 @@
+[
+  {
+    "order": 1,
+    "title": "Two Dogmas of DNS",
+    "date": "2026-07-04",
+    "slug": "whats-in-a-cname",
+    "category": "First analysis",
+    "description": "A Philosophy of Deployment essay reading this site's own CNAME record through Quine: the death of the one canonical book of names, the web that replaced it, and the edge where a name finally becomes a number.",
+    "file": "posts/001-whats-in-a-cname.md"
+  }
+]

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>About | Philosophy of Deployment</title>
+    <meta name="description" content="About Philosophy of Deployment, a small site about publication, hosting, infrastructure, and maintenance.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="site-header">
+        <a class="site-mark" href="index.html">Philosophy of Deployment</a>
+        <nav class="site-nav" aria-label="Site">
+          <a href="index.html">Home</a>
+          <a href="about.html" aria-current="page">About</a>
+          <a href="post.html?slug=whats-in-a-cname">Analysis</a>
+        </nav>
+      </header>
+
+      <div class="about-layout">
+        <aside class="about-side">
+          <h2 class="section-label">About this site</h2>
+          <div class="side-meta" aria-hidden="true">
+            <div class="side-meta__title">— SHAPE</div>
+            <div class="side-meta__row"><span class="k">pages</span><span class="v">3</span></div>
+            <div class="side-meta__row"><span class="k">home</span><span class="v">thesis</span></div>
+            <div class="side-meta__row"><span class="k">about</span><span class="v">this page</span></div>
+            <div class="side-meta__row"><span class="k">analysis</span><span class="v">1 essay</span></div>
+          </div>
+        </aside>
+
+        <article class="plain-page">
+          <h1>About this site</h1>
+          <p>
+            <strong>Philosophy of Deployment</strong> is a small project about
+            what happens when a made thing becomes public through technical
+            infrastructure.
+          </p>
+          <p>
+            Deployment is not simply publication. Publication says that a work has
+            been made public. Deployment says that the work has been made public
+            through an arrangement that must continue to function: files, source
+            control, build steps, DNS, HTTPS, hosting, runtimes, update paths,
+            logs, previews, rollbacks, and failure modes.
+          </p>
+          <p>
+            The guiding maxim is simple: deployment is the passage from artifact
+            to world. A deployed thing has an address, a host, a maintenance
+            burden, and a public promise. When the URL breaks, when the
+            certificate expires, when a build fails, or when a platform changes
+            its rules, the work itself is affected.
+          </p>
+          <p>
+            This version of the site is intentionally spare: a homepage, this
+            about page, and one analysis post. The first task is to analyze a
+            single deployed example closely enough that the shape of deployment
+            becomes visible.
+          </p>
+
+          <h2>Questions</h2>
+          <ol class="q-list">
+            <li><span class="q">Q1</span><span>What is the difference between publishing, hosting, serving, releasing, and deploying?</span></li>
+            <li><span class="q">Q2</span><span>When does a file become a site?</span></li>
+            <li><span class="q">Q3</span><span>Which version of a deployed work is the work: source, build artifact, live URL, or archived release?</span></li>
+            <li><span class="q">Q4</span><span>Who controls the conditions under which a project appears?</span></li>
+            <li><span class="q">Q5</span><span>What does a deployment platform make easy, and what does it hide?</span></li>
+          </ol>
+        </article>
+      </div>
+
+      <footer class="site-footer">
+        <p>
+          Build Little Worlds is the domain. Philosophy of Deployment is the
+          current project.
+        </p>
+        <div class="deploy-meta">
+          <div>www.buildlittleworlds.com</div>
+          <div>github pages · main /docs</div>
+          <div class="live">● live</div>
+        </div>
+      </footer>
+    </main>
+  </body>
+</html>

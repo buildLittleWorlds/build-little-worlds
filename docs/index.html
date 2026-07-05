@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Philosophy of Deployment | Build Little Worlds</title>
+    <meta
+      name="description"
+      content="A small site about deployment as publication plus environment."
+    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="app.js"></script>
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="site-header">
+        <a class="site-mark" href="index.html">Philosophy of Deployment</a>
+        <nav class="site-nav" aria-label="Site">
+          <a href="index.html" aria-current="page">Home</a>
+          <a href="about.html">About</a>
+          <a href="post.html?slug=whats-in-a-cname">Analysis</a>
+        </nav>
+      </header>
+
+      <section class="hero" aria-labelledby="site-title">
+        <p class="eyebrow">A small inquiry into public technical making</p>
+        <h1 id="site-title">Philosophy<br>of Deployment</h1>
+        <p class="subtitle">From artifact to world</p>
+
+        <div class="url-diagram" aria-hidden="true">
+          <div class="url-diagram__line">
+            <span class="url-diagram__dim">https://</span>
+            <span class="url-diagram__host">www.buildlittleworlds.com</span>
+            <span class="url-diagram__dim">/</span>
+            <span class="url-diagram__path">index.html</span>
+          </div>
+          <div class="url-diagram__labels">
+            <span class="l-scheme">scheme&nbsp;&nbsp;</span>
+            <span class="l-host">host — CNAME → github pages&nbsp;&nbsp;</span>
+            <span class="l-path">&nbsp;path</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="lede-grid" aria-label="Thesis">
+        <p>
+          Deployment is publication plus environment: the act of moving a made
+          thing from a private or local condition into a public, addressable,
+          technically maintained condition.
+        </p>
+        <p>
+          A deployed work is not only a file. It is a host, a URL, a build path,
+          a domain relation, a failure mode, and a future maintenance obligation.
+          To deploy is to accept that making&#8209;public now includes
+          infrastructure.
+        </p>
+      </section>
+
+      <section class="axes" aria-labelledby="axes-title">
+        <h2 id="axes-title" class="section-label">The working axes</h2>
+        <div class="axes-grid">
+          <div class="axis"><div class="axis__head"><span class="axis__num">01</span><span class="axis__name">Addressability</span></div><p>Can it be named and reached?</p></div>
+          <div class="axis"><div class="axis__head"><span class="axis__num">02</span><span class="axis__name">Release</span></div><p>When does the private become public?</p></div>
+          <div class="axis"><div class="axis__head"><span class="axis__num">03</span><span class="axis__name">Friction</span></div><p>What resists the passage out?</p></div>
+          <div class="axis"><div class="axis__head"><span class="axis__num">04</span><span class="axis__name">Sovereignty</span></div><p>Who controls the conditions of appearance?</p></div>
+          <div class="axis"><div class="axis__head"><span class="axis__num">05</span><span class="axis__name">Reversibility</span></div><p>Can the work be taken back?</p></div>
+          <div class="axis"><div class="axis__head"><span class="axis__num">06</span><span class="axis__name">Maintenance</span></div><p>What must continue to function?</p></div>
+        </div>
+      </section>
+
+      <section class="analysis" aria-labelledby="posts-title">
+        <div class="analysis__top">
+          <h2 id="posts-title" class="section-label">Analysis</h2>
+          <span class="analysis__count" id="post-count"></span>
+        </div>
+        <div id="post-list" class="post-grid" aria-live="polite">
+          <p class="notice">Loading analysis…</p>
+        </div>
+      </section>
+
+      <footer class="site-footer">
+        <p>
+          Build Little Worlds is the domain. Philosophy of Deployment is the
+          current project: the passage from artifact to world, kept deliberately
+          small.
+        </p>
+        <div class="deploy-meta">
+          <div>www.buildlittleworlds.com</div>
+          <div>github pages · main /docs</div>
+          <div class="live">● live</div>
+        </div>
+      </footer>
+    </main>
+  </body>
+</html>

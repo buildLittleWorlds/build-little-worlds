@@ -28,7 +28,8 @@ Keep `docs/CNAME` unchanged unless the public domain changes.
 - `docs/post.html`: Markdown post reader.
 - `docs/app.js`: loads the post manifest and renders the current analysis.
 - `docs/posts.json`: manifest for the current analysis post.
-- `docs/posts/001-whats-in-a-cname.md`: first concrete deployment analysis.
+- `docs/posts/002-a-gazetteer-of-nowhere.md`: the current analysis — a field
+  survey of a small map of word meanings, written as a gazetteer.
 - `docs/CNAME`: GitHub Pages custom-domain configuration.
 
 ## Local Development
@@ -38,12 +39,3 @@ Serve the static site locally:
 ```bash
 python3 -m http.server 8000 --directory docs
 ```
-
-Run JavaScript and Worker tests:
-
-```bash
-npm test
-```
-
-The Cloudflare Worker remains in the repository for possible future private
-experiments, but it is not linked from the public site.
